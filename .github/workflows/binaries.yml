@@ -3,6 +3,8 @@
 name: Binaries
 on:
   release: { types: [published] }
+  pull_request: # build and smoke-test only, nothing is uploaded
+    paths: [scripts/build-exe.mjs, .github/workflows/binaries.yml, bin/**, src/**]
 permissions:
   contents: read
 jobs:
@@ -37,7 +39,7 @@ jobs:
       - name: package
         id: pkg
         shell: bash
-        env: { NAME: "downloaddoctor-${{ github.event.release.tag_name }}-${{ matrix.name }}" }
+        env: { NAME: "downloaddoctor-${{ github.event.release.tag_name || 'test' }}-${{ matrix.name }}" }
         run: |
           mkdir -p out && cp dist/downloaddoctor${{ matrix.ext }} LICENSE README.md out/
           if [ "${{ runner.os }}" = Windows ]; then
@@ -45,16 +47,18 @@ jobs:
           else
             tar -czf "$NAME.tar.gz" -C out .; echo "file=$NAME.tar.gz" >> "$GITHUB_OUTPUT"
           fi
-      - uses: actions/attest-build-provenance@4d101475d8b20a2381f78447822ac1eab6504dd8 # v4.2.2
+      - if: github.event_name == 'release'
+        uses: actions/attest-build-provenance@4d101475d8b20a2381f78447822ac1eab6504dd8 # v4.2.2
         with: { subject-path: "${{ steps.pkg.outputs.file }}" }
       - name: upload to release
+        if: github.event_name == 'release'
         shell: bash
         env: { GH_TOKEN: "${{ github.token }}", TAG: "${{ github.event.release.tag_name }}", FILE: "${{ steps.pkg.outputs.file }}" }
         run: gh release upload "$TAG" "$FILE" --clobber --repo "$GITHUB_REPOSITORY"
 
   checksums:
     needs: build
-    if: ${{ !cancelled() }} # sums for whatever was built, even if one platform failed
+    if: ${{ github.event_name == 'release' && !cancelled() }} # sums for whatever was built, even if one platform failed
     runs-on: ubuntu-latest
     permissions:
       contents: write
