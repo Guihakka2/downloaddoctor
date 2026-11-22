@@ -10,6 +10,8 @@ npx @guihakka2/downloaddoctor ./releases -r --dupes
 npx @guihakka2/downloaddoctor app.zip --sha256 3f1c…
 ```
 
+**Node.js がなくても使えます：** [最新リリース](https://github.com/Guihakka2/downloaddoctor/releases/latest)から OS（Windows・macOS・Linux）に合ったファイルをダウンロードし、展開してターミナルで実行します（Windows は `downloaddoctor.exe`、macOS/Linux は `./downloaddoctor ~/Downloads`）。プログラムはこのリポジトリのコードから GitHub Actions でビルドされ、`SHA256SUMS.txt` とビルド来歴の証明が付きます。まだ有料の署名はないため、初回は Windows の SmartScreen（「詳細情報」→「実行」）、macOS では `xattr -d com.apple.quarantine downloaddoctor` を一度実行してください。
+
 - **未完了のダウンロード**：`.crdownload`、`.part`、`.partial` などブラウザーの一時ファイル
 - **ファイルの代わりに保存された Web ページ**：実は HTML（ログイン画面やエラー画面）の `.pdf`/`.zip`
 - **壊れた・途中で切れた zip**：中の各ファイルをメモリ上で展開し CRC-32 を確認（`.docx`、`.xlsx`、`.apk` なども）

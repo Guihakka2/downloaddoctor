@@ -10,6 +10,8 @@ npx @guihakka2/downloaddoctor ./releases -r --dupes
 npx @guihakka2/downloaddoctor app.zip --sha256 3f1c…
 ```
 
+**Sem Node.js?** Baixe o programa para o seu sistema na **[última release](https://github.com/Guihakka2/downloaddoctor/releases/latest)** (Windows, macOS ou Linux), descompacte e rode no terminal: `downloaddoctor.exe` no Windows, `./downloaddoctor ~/Downloads` no macOS/Linux. Os programas são gerados pelo GitHub Actions a partir deste código, com `SHA256SUMS.txt` e atestado de procedência. Ainda não têm assinatura paga, então na primeira vez o Windows mostra o SmartScreen ("Mais informações" → "Executar assim mesmo") e no macOS rode `xattr -d com.apple.quarantine downloaddoctor` uma vez.
+
 - **Downloads incompletos**: `.crdownload`, `.part`, `.partial` e outros arquivos temporários de navegador.
 - **Página da web salva no lugar do arquivo**: um `.pdf`/`.zip` que na verdade é HTML (tela de login ou de erro).
 - **Zip corrompido ou cortado**: cada arquivo de dentro é descompactado na memória e tem o CRC-32 conferido (também `.docx`, `.xlsx`, `.apk`…).

@@ -1,6 +1,6 @@
 {
   "name": "@guihakka2/downloaddoctor",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Find broken downloads: unfinished files, truncated or corrupt zip/pdf/images, HTML error pages saved as files, checksum mismatches, duplicates. Read-only.",
   "type": "module",
   "bin": {
