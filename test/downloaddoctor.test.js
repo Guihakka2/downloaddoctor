@@ -1,7 +1,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { spawnSync } from 'node:child_process';
-import { mkdtempSync, writeFileSync, mkdirSync, existsSync } from 'node:fs';
+import { mkdtempSync, writeFileSync, mkdirSync, existsSync, readFileSync } from 'node:fs';
 import { deflateRawSync, gzipSync } from 'node:zlib';
 import { createHash } from 'node:crypto';
 import { tmpdir } from 'node:os';
@@ -99,4 +99,18 @@ test('CLI: folder scan, checksum mismatch, --sha256, --dupes, read-only, errors'
   assert.equal(j.ok, false); assert.equal(j.checked, 5);
   const typo = run([d, '--dupe']);
   assert.equal(typo.status, 2); assert.match(typo.stderr, /did you mean --dupes/);
+});
+
+test('standalone bundle (used for the executables) behaves like the CLI', () => {
+  const build = spawnSync(process.execPath, [new URL('../scripts/build-exe.mjs', import.meta.url).pathname.replace(/^\/(\w:)/, '$1'), '--bundle-only'], { encoding: 'utf8' });
+  assert.equal(build.status, 0, build.stderr);
+  const bundle = new URL('../dist/downloaddoctor.mjs', import.meta.url).pathname.replace(/^\/(\w:)/, '$1');
+  const d = fresh();
+  writeFileSync(join(d, 'good.zip'), GOOD_ZIP);
+  writeFileSync(join(d, 'bad.pdf'), '<html>login</html>');
+  const viaBundle = spawnSync(process.execPath, [bundle, d, '--json'], { encoding: 'utf8' });
+  const viaCli = run([d, '--json']);
+  assert.equal(viaBundle.status, 1);
+  assert.deepEqual(JSON.parse(viaBundle.stdout), JSON.parse(viaCli.stdout));
+  assert.equal(spawnSync(process.execPath, [bundle, '--version'], { encoding: 'utf8' }).stdout.trim(), JSON.parse(readFileSync(new URL('../package.json', import.meta.url), 'utf8')).version);
 });

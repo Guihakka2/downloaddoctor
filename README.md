@@ -30,6 +30,27 @@ downloaddoctor  8 files checked · 4 with problems
     photo (1).jpg  =  photo.jpg
 ```
 
+## Download (no Node.js needed)
+
+Don't have Node.js? Download the program for your system from the **[latest release](https://github.com/Guihakka2/downloaddoctor/releases/latest)**, unzip it and run it from a terminal:
+
+| System | File |
+|---|---|
+| Windows (most PCs) | `downloaddoctor-<version>-windows-x64.zip` |
+| Windows on ARM | `downloaddoctor-<version>-windows-arm64.zip` |
+| macOS (Apple silicon, M1 and newer) | `downloaddoctor-<version>-macos-arm64.tar.gz` |
+| macOS (Intel) | `downloaddoctor-<version>-macos-x64.tar.gz` |
+| Linux | `downloaddoctor-<version>-linux-x64.tar.gz` / `linux-arm64` |
+
+```bash
+downloaddoctor.exe            # Windows: checks your Downloads folder
+./downloaddoctor ~/Downloads  # macOS / Linux
+```
+
+The programs are built by GitHub Actions from this repository's code. Each release has a `SHA256SUMS.txt` (downloaddoctor itself can check it) and a [build provenance attestation](https://docs.github.com/actions/security-for-github-actions/using-artifact-attestations) you can verify with `gh attestation verify <file> -R Guihakka2/downloaddoctor`.
+
+They are not signed with a paid certificate yet, so the first run shows a warning: on **Windows**, SmartScreen → "More info" → "Run anyway"; on **macOS**, run `xattr -d com.apple.quarantine downloaddoctor` once (or right-click → Open).
+
 ## What it checks
 
 | Problem | How |

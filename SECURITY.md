@@ -13,3 +13,7 @@ You will get a reply within 7 days.
 - Symlinks are not followed, dot folders are skipped with `-r`, and at most 20,000 files are checked per run.
 - File names are stripped of terminal control characters before printing.
 - No network access, no telemetry, zero runtime dependencies. npm releases are built by GitHub Actions with provenance; never by hand.
+
+## Standalone executables
+
+Release executables are built only by GitHub Actions (`binaries.yml`) from the tagged source with the official Node.js single executable application feature, smoke-tested, and published with a SHA256SUMS.txt and a build provenance attestation (`gh attestation verify <file> -R Guihakka2/downloaddoctor`). They are not code-signed with a paid certificate yet.
